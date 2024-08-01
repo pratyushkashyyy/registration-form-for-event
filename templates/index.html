@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechnoFusion Registration</title>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>TechnoFusion Registration</h1>
+        <form id="registrationForm" action="/submit" method="post" enctype="multipart/form-data">
+            <div id="step1" class="step">
+                <div class="input_box">
+                    <label>
+                        <input type="radio" id="jain" name="participant_type" value="Jain" required> Jain University
+                    </label>
+                    <label>
+                        <input type="radio" id="other" name="participant_type" value="Other" required> Other College
+                    </label>
+                </div>
+                <div id="college-name-box" class="input_box hidden">
+                    <label for="college-name-input">Enter College Name:</label>
+                    <input type="text" id="college-name-input" name="college_name" placeholder="Enter your College Name">
+                </div>
+                <div class="input_box">
+                    <label for="college-id">Upload Your College ID Card:</label>
+                    <input type="file" id="college-id" name="college_id" accept="image/*" required>
+                </div>
+                <button type="button" class="pay-button" onclick="showStep2()">Next</button>
+            </div>
+
+            <div id="step2" class="step hidden">
+                <h2>Select Event</h2>
+                <button type="button" class="pay-button" onclick="showStep1()">Previous</button>
+                <div class="input_box">
+                    <label>
+                        <input type="radio" id="bgmi" name="event" value="BGMI" required> BGMI
+                    </label>
+                    <label>
+                        <input type="radio" id="valorant" name="event" value="Valorant" required> Valorant
+                    </label>
+                    <label>
+                        <input type="radio" id="ctf" name="event" value="CTF" required> CTF
+                    </label>
+                    <label>
+                        <input type="radio" id="it-quiz" name="event" value="IT-Quiz" required> IT-QUIZ
+                    </label>
+                    <label>
+                        <input type="radio" id="web-wizards" name="event" value="Web-Wizards" required> Web Wizards
+                    </label>
+                    <label>
+                        <input type="radio" id="jury-rigged" name="event" value="Jury-Rigged" required> Jury Rigged
+                    </label>
+                    <label>
+                        <input type="radio" id="pixel-perfect" name="event" value="Pixel-Perfect" required> Pixel Perfect
+                    </label>
+                    <label>
+                        <input type="radio" id="scam-poetry" name="event" value="Scam-Poetry" required> Scam Poetry
+                    </label>
+                    <label>
+                        <input type="radio" id="ideathon" name="event" value="Ideathon" required> Ideathon
+                    </label>
+                    <label>
+                        <input type="radio" id="meme-mania" name="event" value="Meme-Mania" required> Meme Mania
+                    </label>
+                    <label>
+                        <input type="radio" id="blazing-tongue" name="event" value="Blazing Tongue" required> Blazing Tongue
+                    </label>
+                </div>
+                <div class="input_box">
+                    <label>Price: <span id="price-display">0</span></label>
+                </div>
+                <button type="button" class="pay-button" onclick="showStep3()">Next</button>
+            </div>
+
+            <div id="step3" class="step hidden">
+                <h2>Team Details</h2>
+                <button type="button" class="pay-button" onclick="showStep2()">Previous</button>
+                <div class="input_box double">
+                    <div class="input_box-item">
+                        <label for="name">Team Leader Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                    </div>
+                    <div class="input_box-item">
+                        <label for="team_name">Team Name</label>
+                        <input type="text" id="team_name" name="team_name" placeholder="Enter your team name" required>
+                    </div>
+                </div>
+                <div class="input_box">
+                    <label for="email">Team Leader Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                <div class="input_box">
+                    <label for="number">Team Leader Phone Number</label>
+                    <input type="tel" id="number" name="number" placeholder="Enter your number" required>
+                </div>
+                <div id="team-grid">
+                    <!-- Dynamic team member fields will be inserted here -->
+                </div>
+                <button type="button" class="pay-button" onclick="showStep4()">Next</button>
+            </div>
+
+            <div id="step4" class="step hidden">
+                <h2>Payment Details</h2>
+                <button type="button" class="pay-button" onclick="showStep3()">Previous</button>
+                <button type="button" class="pay-button" id="pay-btn">Show Payment QR</button>
+                        <script>
+                            document.getElementById('pay-btn').addEventListener('click', function() {
+                                Swal.fire({
+                                    title: 'Pay by QR Code',
+                                    text: 'Scan the QR code to complete your payment.',
+                                    imageUrl: 'https://i.ibb.co/h24pg7j/pay.jpg',
+                                    imageWidth: 300,
+                                    imageHeight: 300,
+                                    imageAlt: 'QR Code',
+                                    confirmButtonText: 'Done'
+                                });
+                            });
+                        </script>
+                    
+                <div class="input_box">
+                    <label for="utr">UTR Number</label>
+                    <input type="text" id="utr" name="utr" placeholder="Enter your UTR number" required>
+                </div>
+                <div class="input_box">
+                    <label for="payment-screenshot">Upload Payment Screenshot</label>
+                    <input type="file" id="payment-screenshot" name="payment_screenshot" accept="image/*" required>
+                </div>
+                <button type="submit" class="pay-button">Submit</button>
+                <pre>If Submit button is not working make sure you have filled all the details.</pre>
+
+            </div>
+        </form>
+    </div>
+    <script src="{{ url_for('static', filename='styles/index.js') }}"></script>
+</body>
+</html>

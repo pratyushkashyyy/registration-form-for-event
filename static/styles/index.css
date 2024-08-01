@@ -1,0 +1,226 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
+    
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    background: #1A1A1A;
+    color: #FFFFFF;
+    position: relative;
+}
+
+.container {
+    max-width: 900px;
+    width: 100%;
+    background: rgba(26, 26, 26, 0.8);
+    border-radius: 0.5rem;
+    overflow: auto;
+    margin: 20px;
+    backdrop-filter: blur(10px);
+    padding: 200px;
+    animation: fadeIn 1.5s ease-in-out;
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.container .title {
+    padding: 15px;
+    background: #0A8A1A; /* Ben 10 theme color */
+    text-align: center;
+    border-radius: 0.5rem;
+    margin-bottom: 20px;
+}
+
+.container .title p {
+    font-size: 28px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+.user_details {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input_box {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input_box label {
+    font-weight: 500;
+    color: #0A8A1A; /* Ben 10 theme color */
+    display: flex;
+    align-items: center;
+}
+
+.input_box input[type="text"],
+.input_box input[type="email"],
+.input_box input[type="tel"] {
+    height: 45px;
+    border: none;
+    border-radius: 5px;
+    padding-left: 15px;
+    font-size: 16px;
+    color: #000000;
+    background-color: #EDE7F6;
+    transition: box-shadow 0.3s;
+}
+
+.input_box input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.input_box.double {
+    display: flex;
+    gap: 20px;
+}
+
+.input_box.double .input_box-item {
+    flex: 1;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.hidden { display: none; }
+.input_box { margin-bottom: 15px; }
+.input_box label { display: block; margin-bottom: 5px; }
+.input_box input, .input_box select { width: 100%; padding: 8px; }
+
+h1 {
+    color: #0A8A1A; /* Ben 10 theme color */
+    text-align: center;
+    padding-bottom: 40px;
+}
+/* Add this to your CSS file */
+.error {
+    border: 2px solid red;
+}
+
+/* Optional: Add some styles to the hidden class */
+.hidden {
+    display: none;
+}
+
+
+@media screen and (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    .container .title p {
+        font-size: 24px;
+    }
+
+    .input_box input {
+        font-size: 14px;
+    }
+
+    .input_box.double {
+        flex-direction: column;
+    }
+
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.pay-button {
+    display: inline-block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background: linear-gradient(45deg, #0A8A1A, #77B255, #0A8A1A);
+    background-size: 400%;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.5s, transform 0.3s;
+    text-align: center;
+    font-size: 16px;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    color: white;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.pay-button:hover {
+    transform: translateY(-3px);
+    background-position: 100% 0;
+}
+
+.pay-button:active {
+    transform: translateY(1px);
+}
+
+.moving-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:black;
+    background-size: cover;
+    z-index: 0;
+    opacity: 0.2;
+    animation: moveBackground 30s linear infinite;
+}
+
+@keyframes moveBackground {
+    0% { background-position: 0 0; }
+    100% { background-position: 100% 100%; }
+}
+.reg_btn {
+text-align: center;
+margin-top: 20px;
+}
+
+.reg_btn input[type="submit"] {
+background-color: #4CAF50;
+border: none;
+color: white;
+padding: 15px 32px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 16px;
+margin: 4px 2px;
+cursor: pointer;
+border-radius: 8px;
+transition: background-color 0.3s ease;
+border: 2px solid #4CAF50;
+}
+
+.reg_btn input[type="submit"]:hover {
+background-color: #45a049;
+border-color: #45a049;
+}
+
+.reg_btn input[type="submit"]:active {
+background-color: #367c39;
+border-color: #367c39;
+}
+
