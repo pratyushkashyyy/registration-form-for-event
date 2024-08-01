@@ -163,3 +163,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+
+//success page js
+
+document.addEventListener('DOMContentLoaded', function() {
+    const countdownElement = document.getElementById('countdown');
+    const timerElement = document.getElementById('timer');
+    const whatsappButton = document.getElementById('whatsapp-link');
+
+    function startCountdown() {
+        let countdownValue = 3; // Start countdown from 3 seconds
+        countdownElement.classList.remove('hidden'); // Show countdown
+
+        // Update countdown every second
+        const countdownInterval = setInterval(function() {
+            timerElement.textContent = countdownValue;
+            countdownValue -= 1;
+            if (countdownValue < 0) {
+                clearInterval(countdownInterval);
+                window.location.href = 'https://jain.hosting.acm.org/technofusion-2024/'; // Redirect after countdown
+            }
+        }, 1000);
+    }
+
+    whatsappButton.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+
+        // Open WhatsApp link in a new tab
+        window.open(this.href, '_blank');
+
+        // Start the countdown
+        startCountdown();
+    });
+});
