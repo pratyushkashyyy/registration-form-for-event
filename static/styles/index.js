@@ -109,7 +109,7 @@ function updateTeamMembers() {
 
 // Navigation buttons
 document.addEventListener('click', (event) => {
-    if (event.target.classList.contains('pay-button')) {
+    if (event.target.closest('.pay-button, .previous-button')) {
         const currentStep = document.querySelector('.step:not(.hidden)');
         const stepActions = {
             'step1': showStep.bind(null, 2),
@@ -118,9 +118,13 @@ document.addEventListener('click', (event) => {
             'step4': () => document.getElementById('registrationForm').submit()
         };
 
-        if (event.target.textContent.includes('Next')) {
-            stepActions[currentStep.id]?.();
-        } else if (event.target.textContent.includes('Previous')) {
+        if (event.target.closest('.pay-button')) {
+            // Next button functionality
+            if (event.target.closest('.pay-button').textContent.includes('Next')) {
+                stepActions[currentStep.id]?.();
+            }
+        } else if (event.target.closest('.previous-button')) {
+            // Previous button functionality
             const prevStepActions = {
                 'step2': showStep.bind(null, 1),
                 'step3': showStep.bind(null, 2),
@@ -130,6 +134,8 @@ document.addEventListener('click', (event) => {
         }
     }
 });
+
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -155,5 +161,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 form.submit();
             }
         });
+    });
+});
+
+
+//success page js
+
+document.addEventListener('DOMContentLoaded', function() {
+    const countdownElement = document.getElementById('countdown');
+    const timerElement = document.getElementById('timer');
+    const whatsappButton = document.getElementById('whatsapp-link');
+
+    function startCountdown() {
+        let countdownValue = 3; // Start countdown from 3 seconds
+        countdownElement.classList.remove('hidden'); // Show countdown
+
+        // Update countdown every second
+        const countdownInterval = setInterval(function() {
+            timerElement.textContent = countdownValue;
+            countdownValue -= 1;
+            if (countdownValue < 0) {
+                clearInterval(countdownInterval);
+                window.location.href = 'https://jain.hosting.acm.org/technofusion-2024/'; // Redirect after countdown
+            }
+        }, 1000);
+    }
+
+    whatsappButton.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+
+        // Open WhatsApp link in a new tab
+        window.open(this.href, '_blank');
+
+        // Start the countdown
+        startCountdown();
     });
 });
