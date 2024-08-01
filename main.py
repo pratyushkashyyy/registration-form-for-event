@@ -5,7 +5,6 @@ import uuid
 
 app = Flask(__name__)
 
-# Ensure the upload folder exists
 UPLOAD_FOLDER = 'uploads'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
