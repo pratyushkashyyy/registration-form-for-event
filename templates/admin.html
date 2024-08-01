@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Admin Panel - Registrations</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        img {
+            max-width: 100px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Panel - Registrations</h1>
+    <a href="{{ url_for('logout') }}">Logout</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Participant Type</th>
+                <th>College Name</th>
+                <th>Event</th>
+                <th>Team Leader Name</th>
+                <th>Team Name</th>
+                <th>Team Leader Email</th>
+                <th>Team Leader Phone</th>
+                <th>Team Members</th>
+                <th>UTR Number</th>
+                <th>ID Card</th>
+                <th>Payment Screenshot</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registration in registrations %}
+            <tr>
+                <td>{{ registration.id }}</td>
+                <td>{{ registration.participant_type }}</td>
+                <td>{{ registration.college_name }}</td>
+                <td>{{ registration.event }}</td>
+                <td>{{ registration.team_leader_name }}</td>
+                <td>{{ registration.team_name }}</td>
+                <td>{{ registration.team_leader_email }}</td>
+                <td>{{ registration.team_leader_phone }}</td>
+                <td>{{ registration.team_members }}</td>
+                <td>{{ registration.utr_number }}</td>
+                <td>
+                    {% if registration.id_card_filename %}
+                    <img src="{{ url_for('uploaded_file', filename=registration.id_card_filename) }}" alt="ID Card">
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>
+                    {% if registration.payment_screenshot_filename %}
+                    <img src="{{ url_for('uploaded_file', filename=registration.payment_screenshot_filename) }}" alt="Payment Screenshot">
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
