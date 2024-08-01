@@ -224,3 +224,17 @@ background-color: #367c39;
 border-color: #367c39;
 }
 
+.previous-button {
+    cursor: pointer;
+    width: 2rem;
+    height: 2rem;
+    color: white !important;
+    margin: 10px;
+    transition: transform 0.2s;
+    border: none;
+    background: none;
+}
+
+.previous-button:hover {
+    transform: scale(1.1);
+}

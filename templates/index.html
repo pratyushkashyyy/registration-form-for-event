@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechnoFusion Registration</title>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
 </head>
@@ -33,8 +34,12 @@
             </div>
 
             <div id="step2" class="step hidden">
-                <h2>Select Event</h2>
-                <button type="button" class="pay-button" onclick="showStep1()">Previous</button>
+                <button class="previous-button" onclick="showStep1()">
+                    <box-icon name="arrow-back" color="white"></box-icon>
+                </button>
+                  <br> 
+                    
+                <h2>Select Event</h2><br>
                 <div class="input_box">
                     <label>
                         <input type="radio" id="bgmi" name="event" value="BGMI" required> BGMI
@@ -77,8 +82,11 @@
             </div>
 
             <div id="step3" class="step hidden">
-                <h2>Team Details</h2>
-                <button type="button" class="pay-button" onclick="showStep2()">Previous</button>
+                <button class="previous-button" onclick="showStep2()">
+                    <box-icon name="arrow-back" color="white"></box-icon>
+                </button>
+                  <br>  
+                <h2>Team Details</h2><br>
                 <div class="input_box double">
                     <div class="input_box-item">
                         <label for="name">Team Leader Name</label>
@@ -104,8 +112,11 @@
             </div>
 
             <div id="step4" class="step hidden">
-                <h2>Payment Details</h2>
-                <button type="button" class="pay-button" onclick="showStep3()">Previous</button>
+                <button class="previous-button" onclick="showStep3()">
+                    <box-icon name="arrow-back" color="white"></box-icon>
+                </button>
+                  <br>  
+                <h2>Payment Details</h2><br>
                 <button type="button" class="pay-button" id="pay-btn">Show Payment QR</button>
                         <script>
                             document.getElementById('pay-btn').addEventListener('click', function() {
@@ -136,5 +147,6 @@
         </form>
     </div>
     <script src="{{ url_for('static', filename='styles/index.js') }}"></script>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 </body>
 </html>

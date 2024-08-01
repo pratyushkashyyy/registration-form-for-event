@@ -109,7 +109,7 @@ function updateTeamMembers() {
 
 // Navigation buttons
 document.addEventListener('click', (event) => {
-    if (event.target.classList.contains('pay-button')) {
+    if (event.target.closest('.pay-button, .previous-button')) {
         const currentStep = document.querySelector('.step:not(.hidden)');
         const stepActions = {
             'step1': showStep.bind(null, 2),
@@ -118,9 +118,13 @@ document.addEventListener('click', (event) => {
             'step4': () => document.getElementById('registrationForm').submit()
         };
 
-        if (event.target.textContent.includes('Next')) {
-            stepActions[currentStep.id]?.();
-        } else if (event.target.textContent.includes('Previous')) {
+        if (event.target.closest('.pay-button')) {
+            // Next button functionality
+            if (event.target.closest('.pay-button').textContent.includes('Next')) {
+                stepActions[currentStep.id]?.();
+            }
+        } else if (event.target.closest('.previous-button')) {
+            // Previous button functionality
             const prevStepActions = {
                 'step2': showStep.bind(null, 1),
                 'step3': showStep.bind(null, 2),
@@ -130,6 +134,8 @@ document.addEventListener('click', (event) => {
         }
     }
 });
+
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
