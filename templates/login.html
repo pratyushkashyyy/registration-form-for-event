@@ -3,26 +3,89 @@
 <head>
     <meta charset="utf-8">
     <title>Admin Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1b1b1b;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+        }
+        form {
+            background-color: #0b3d0b;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            width: 300px;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            margin-top: 15px;
+            text-align: left;
+            font-weight: bold;
+            color: white;
+        }
+        input[type="text"], input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            background-color: #333;
+            color: #ffffff;
+        }
+        button {
+            padding: 10px 20px;
+            color: #ffffff;
+            background-color: #2e692e;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #00cc00;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+        li {
+            background-color: #ffdddd;
+            color: #d8000c;
+            border: 1px solid #d8000c;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Admin Login</h1>
     <form method="POST" action="{{ url_for('login') }}">
+        <h1>Admin Login</h1>
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
-        <br>
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
-        <br>
         <button type="submit">Login</button>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
     </form>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
 </body>
 </html>
