@@ -4,21 +4,69 @@
     <meta charset="utf-8">
     <title>Admin Panel - Registrations</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #095027;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        a {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #095027;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        a:hover {
+            background-color: #0c813d;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            border-radius: 5px;
+            overflow: hidden;
         }
         th, td {
-            padding: 8px;
+            padding: 12px 15px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #dddddd;
         }
         th {
+            background-color: #095027;
+            color: #ffffff;
+        }
+        tr:nth-child(even) {
             background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #e6f7ff;
         }
         img {
             max-width: 100px;
             height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        button {
+            padding: 8px 12px;
+            color: #ffffff;
+            background-color: #095027;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0c813d;
         }
     </style>
 </head>

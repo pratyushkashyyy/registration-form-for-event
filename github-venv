@@ -1,0 +1,25 @@
+1. Deactivate and Remove the Existing Environment:
+deactivate
+rm -rf venv
+
+2.Create a New Virtual Environment:
+python -m venv venv
+
+3.Activate the New Virtual Environment:
+source venv/bin/activate
+
+4.Install Flask:
+
+5. Run Your Script Again:
+python main.py
+
+
+GITHUB CHANGES
+
+Add the files you’ve changed to the staging area:
+
+git add .
+
+git commit -m "Your descriptive commit message"
+
+git push origin main
