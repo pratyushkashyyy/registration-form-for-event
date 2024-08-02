@@ -2,6 +2,9 @@ from flask import Flask, request, render_template, redirect, url_for, session, f
 from flask_sqlalchemy import SQLAlchemy
 import os
 import uuid
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 app = Flask(__name__)
 
@@ -94,6 +97,50 @@ def submit():
 
     return render_template('success.html')
 
+
+
+def send_email_to_registration(registration):
+    smtp_server = 'smtp.gmail.com'
+    port = 587
+    login = 'your_email@gmail.com'
+    password = 'your_password'
+    sender_email = 'your_email@gmail.com'
+    recipient_email = registration.team_leader_email
+    subject = 'Registration Confirmation'
+    body = f"""
+    Dear {registration.team_leader_name},
+
+    Thank you for registering for {registration.event}.
+    
+    Best regards,
+    Event Team
+    """
+
+    server = smtplib.SMTP(smtp_server, port)
+    server.starttls()
+    server.login(login, password)
+
+    msg = MIMEMultipart()
+    msg['From'] = sender_email
+    msg['To'] = recipient_email
+    msg['Subject'] = subject
+    msg.attach(MIMEText(body, 'plain'))
+
+    server.sendmail(sender_email, recipient_email, msg.as_string())
+    server.quit()
+
+@app.route('/admin/send_email/<int:id>', methods=['POST'])
+def send_email(id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    registration = Registration.query.get_or_404(id)
+    send_email_to_registration(registration)
+    flash('Email has been sent', 'success')
+
+    return redirect(url_for('admin'))
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -117,6 +164,31 @@ def admin():
         return redirect(url_for('login'))
     registrations = Registration.query.all()
     return render_template('admin.html', registrations=registrations)
+
+@app.route('/admin/delete/<int:id>', methods=['POST'])
+def delete_entry(id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    
+    registration = Registration.query.get_or_404(id)
+    if registration.id_card_filename:
+        try:
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], registration.id_card_filename))
+        except OSError as e:
+            print(f"Error: {e.strerror} - {e.filename}")
+
+    if registration.payment_screenshot_filename:
+        try:
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], registration.payment_screenshot_filename))
+        except OSError as e:
+            print(f"Error: {e.strerror} - {e.filename}")
+
+    db.session.delete(registration)
+    db.session.commit()
+    flash('Registration has been deleted', 'success')
+    
+    return redirect(url_for('admin'))
+
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):

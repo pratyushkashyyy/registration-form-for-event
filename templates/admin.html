@@ -3,78 +3,83 @@
 <head>
     <meta charset="utf-8">
     <title>Admin Panel - Registrations</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
         img {
             max-width: 100px;
             height: auto;
         }
+        form {
+            display: inline;
+        }
     </style>
 </head>
 <body>
-    <h1>Admin Panel - Registrations</h1>
-    <a href="{{ url_for('logout') }}">Logout</a>
+    <div class="container">
+        <h1 class="my-4">Admin Panel - Registrations</h1>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger mb-4">Logout</a>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Participant Type</th>
-                <th>College Name</th>
-                <th>Event</th>
-                <th>Team Leader Name</th>
-                <th>Team Name</th>
-                <th>Team Leader Email</th>
-                <th>Team Leader Phone</th>
-                <th>Team Members</th>
-                <th>UTR Number</th>
-                <th>ID Card</th>
-                <th>Payment Screenshot</th>
-                <th>Confirmation</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for registration in registrations %}
-            <tr>
-                <td>{{ registration.id }}</td>
-                <td>{{ registration.participant_type }}</td>
-                <td>{{ registration.college_name }}</td>
-                <td>{{ registration.event }}</td>
-                <td>{{ registration.team_leader_name }}</td>
-                <td>{{ registration.team_name }}</td>
-                <td>{{ registration.team_leader_email }}</td>
-                <td>{{ registration.team_leader_phone }}</td>
-                <td>{{ registration.team_members }}</td>
-                <td>{{ registration.utr_number }}</td>
-                <td>
-                    {% if registration.id_card_filename %}
-                    <img src="{{ url_for('uploaded_file', filename=registration.id_card_filename) }}" alt="ID Card">
-                    {% else %}
-                    N/A
-                    {% endif %}
-                </td>
-                <td>
-                    {% if registration.payment_screenshot_filename %}
-                    <img src="{{ url_for('uploaded_file', filename=registration.payment_screenshot_filename) }}" alt="Payment Screenshot">
-                    {% else %}
-                    N/A
-                    {% endif %}
-                </td>
-                <td><button>Send Email</button></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Participant Type</th>
+                    <th>College Name</th>
+                    <th>Event</th>
+                    <th>Team Leader Name</th>
+                    <th>Team Name</th>
+                    <th>Team Leader Email</th>
+                    <th>Team Leader Phone</th>
+                    <th>Team Members</th>
+                    <th>UTR Number</th>
+                    <th>ID Card</th>
+                    <th>Payment Screenshot</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registration in registrations %}
+                <tr>
+                    <td>{{ registration.id }}</td>
+                    <td>{{ registration.participant_type }}</td>
+                    <td>{{ registration.college_name }}</td>
+                    <td>{{ registration.event }}</td>
+                    <td>{{ registration.team_leader_name }}</td>
+                    <td>{{ registration.team_name }}</td>
+                    <td>{{ registration.team_leader_email }}</td>
+                    <td>{{ registration.team_leader_phone }}</td>
+                    <td>{{ registration.team_members }}</td>
+                    <td>{{ registration.utr_number }}</td>
+                    <td>
+                        {% if registration.id_card_filename %}
+                        <img src="{{ url_for('uploaded_file', filename=registration.id_card_filename) }}" alt="ID Card">
+                        {% else %}
+                        N/A
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if registration.payment_screenshot_filename %}
+                        <img src="{{ url_for('uploaded_file', filename=registration.payment_screenshot_filename) }}" alt="Payment Screenshot">
+                        {% else %}
+                        N/A
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form action="{{ url_for('delete_entry', id=registration.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                        <form action="{{ url_for('send_email', id=registration.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-primary btn-sm">Send Email</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
