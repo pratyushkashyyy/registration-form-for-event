@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>TechnoFusion Registration</h1>
+        <h1>TechnoFusion 2K24 Registration</h1>
         <form id="registrationForm" action="/submit" method="post" enctype="multipart/form-data">
             <div id="step1" class="step">
                 <div class="input_box">
@@ -19,15 +19,15 @@
                         <input type="radio" id="jain" name="participant_type" value="Jain" required> Jain University
                     </label>
                     <label>
-                        <input type="radio" id="other" name="participant_type" value="Other" required> Other College
+                        <input type="radio" id="other" name="participant_type" value="Other" required> Other College/Universities
                     </label>
                 </div>
                 <div id="college-name-box" class="input_box hidden">
-                    <label for="college-name-input">Enter College Name:</label>
+                    <label for="college-name-input">Enter College/University Name:</label>
                     <input type="text" id="college-name-input" name="college_name" placeholder="Enter your College Name">
                 </div>
                 <div class="input_box">
-                    <label for="college-id">Upload Your College ID Card:</label>
+                    <label for="college-id">Upload Your College/University ID Card:</label>
                     <input type="file" id="college-id" name="college_id" accept="image/*" required>
                 </div>
                 <button type="button" class="pay-button" onclick="showStep2()">Next</button>
@@ -76,7 +76,7 @@
                     </label>
                 </div>
                 <div class="input_box">
-                    <label>Price: <span id="price-display">0</span></label>
+                    <label>Registration Fee: <span id="price-display">0</span></label>
                 </div>
                 <button type="button" class="pay-button" onclick="showStep3()">Next</button>
             </div>
