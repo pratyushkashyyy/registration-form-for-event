@@ -6,6 +6,9 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from werkzeug.utils import secure_filename
+import qrcode
+import yagmail
+import os
 
 app = Flask(__name__)
 
@@ -102,35 +105,50 @@ def submit():
 
     return render_template('success.html')
 
-def send_email_to_registration(registration):
-    smtp_server = 'smtp.gmail.com'
-    port = 587
-    login = 'your_email@gmail.com'
-    password = 'your_password'
-    sender_email = 'your_email@gmail.com'
-    recipient_email = registration.team_leader_email
-    subject = 'Registration Confirmation'
-    body = f"""
-    Dear {registration.team_leader_name},
+def generate_qr_code(data, file_name):
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(data)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white")
+    img.save(file_name)
 
-    Thank you for registering for {registration.event}.
-    
-    Best regards,
-    Event Team
-    """
+def send_email_with_qr(registration):
+    try:
+        qr_file_name = "event_qr_code.png"
+        data = f"Name: {registration.team_leader_email}\nEvent: {registration.event}\nPayment Status: Paid"
+        generate_qr_code(data, qr_file_name)
+        from_email = 'pratyushk403@gmail.com'
+        from_password = 'snbb adpd jbvz svyw'
+        body = f"""
+            Dear {registration.team_leader_name},
 
-    server = smtplib.SMTP(smtp_server, port)
-    server.starttls()
-    server.login(login, password)
+            Thank you for registering for our computing fest at JAIN (Deemed-to-be University), TechnoFusion 2K24!
 
-    msg = MIMEMultipart()
-    msg['From'] = sender_email
-    msg['To'] = recipient_email
-    msg['Subject'] = subject
-    msg.attach(MIMEText(body, 'plain'))
+            Your registration is successful. Please scan the QR code at the registration desk on the day of fest to gain entry.
 
-    server.sendmail(sender_email, recipient_email, msg.as_string())
-    server.quit()
+            We look forward to seeing you at the fest!
+
+            Best regards,
+            Team TechnoFusion 2K24 
+            ACM Student Chapter
+            JAIN (Deemed-to-be University)
+            """
+        yag = yagmail.SMTP(from_email, from_password)
+        yag.send(
+            to=registration.team_leader_email,
+            subject='Registration Confirmation for TechnoFusion 2K24',
+            contents=body,
+            attachments=qr_file_name
+        )
+        print("Email sent successfully!")
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+
 
 @app.route('/admin/send_email/<int:id>', methods=['POST'])
 def send_email(id):
@@ -138,7 +156,7 @@ def send_email(id):
         return redirect(url_for('login'))
 
     registration = Registration.query.get_or_404(id)
-    send_email_to_registration(registration)
+    send_email_with_qr(registration)
     flash('Email has been sent', 'success')
 
     return redirect(url_for('admin'))
