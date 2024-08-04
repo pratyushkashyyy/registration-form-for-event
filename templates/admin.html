@@ -144,7 +144,16 @@
                 <td>{{ registration.team_leader_email }}</td>
                 <td>{{ registration.team_leader_phone }}</td>
                 <td>
-                    {{registration.team_members}}
+                    {% if registration.event == 'BGMI' %}
+                        
+                        <div>
+                            <strong>Members :</strong> {{ registration.team_members }}<br>
+                            <strong>UID:</strong> {{ registration.players }}<br>
+                        </div>
+                        
+                    {% else %}
+                        {{ registration.team_members }}
+                    {% endif %}
                 </td>
                 <td>{{ registration.utr_number }}</td>
                 <td>

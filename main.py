@@ -30,6 +30,7 @@ class Registration(db.Model):
     team_leader_email = db.Column(db.String(100))
     team_leader_phone = db.Column(db.String(20))
     team_members = db.Column(db.String(500))
+    players = db.Column(db.String(500))
     utr_number = db.Column(db.String(100))
     id_card_filename = db.Column(db.String(200))
     payment_screenshot_filename = db.Column(db.String(200))
@@ -72,6 +73,13 @@ def submit():
             team_members.append(member_name)
     team_members_str = ', '.join(team_members)
 
+    players = []
+    for i in range(1,6):
+        player_uid = request.form.get(f'player{i}_uid')
+        if player_uid:
+            players.append(player_uid)
+    player_str = ', '.join(players)
+
     utr_number = request.form.get('utr')
     payment_screenshot = request.files.get('payment_screenshot')
     payment_screenshot_filename = None
@@ -88,6 +96,7 @@ def submit():
         team_leader_email=team_leader_email,
         team_leader_phone=team_leader_phone,
         team_members=team_members_str,
+        players = player_str,
         utr_number=utr_number,
         id_card_filename=id_card_filename,
         payment_screenshot_filename=payment_screenshot_filename

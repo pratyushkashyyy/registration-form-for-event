@@ -82,7 +82,7 @@ function updateTeamMembers() {
         let memberCount = 1;
         switch (selectedEvent.value) {
             case 'BGMI':
-                memberCount = 4;
+                memberCount = 5; // Adjusted to match BGMI requirements
                 break;
             case 'Valorant':
                 memberCount = 5;
@@ -101,6 +101,11 @@ function updateTeamMembers() {
             div.innerHTML = `
                 <label for="member${i + 1}">Member ${i + 1} Name:</label>
                 <input type="text" id="member${i + 1}" name="team_member_${i + 1}" placeholder="Enter member ${i + 1} name" required>
+                ${selectedEvent.value === 'BGMI' ? `
+                <div class="input_box bgmi-field">
+                    <label for="player_${i + 1}_uid">Member ${i + 1} UID:</label>
+                    <input type="text" id="player_${i + 1}uid" name="player${i + 1}_uid" placeholder="Enter Member ${i + 1}'s UID">
+                </div>` : ''}
             `;
             teamGrid.appendChild(div);
         }
