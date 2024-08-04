@@ -87,7 +87,7 @@ function updatePrice() {
             'Jain': {
                 'BGMI': 299,
                 'Valorant': 299,
-                'Blazing Tongue': 99,
+                'Blazing-Tongue': 99,
                 'IT-Quiz': 99,
                 'Pixel-Perfect': 99,
                 'Meme-Mania': 99,
