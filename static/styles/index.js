@@ -129,13 +129,31 @@ function updateTeamMembers() {
         let memberCount = 1;
         switch (selectedEvent.value) {
             case 'BGMI':
-                memberCount = 5; // Adjusted to match BGMI requirements
+                memberCount = 5;
                 break;
             case 'Valorant':
                 memberCount = 5;
                 break;
             case 'CTF':
                 memberCount = 3;
+                break;
+            case 'Scam-Poetry':
+                memberCount = 3;
+                break;
+            case 'IT-Quiz':
+                memberCount = 2;
+                break;
+            case 'Jury-Rigged':
+                memberCount = 2;
+                break;
+            case 'Web-Wizards':
+                memberCount = 2;
+                break;
+            case 'Ideathon':
+                memberCount = 3;
+                break;
+            case 'Blazing-Tongue':
+                memberCount = 2;
                 break;
             default:
                 memberCount = 1;
