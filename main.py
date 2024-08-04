@@ -16,6 +16,8 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
+
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1000 * 1000
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///event_registration.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -118,7 +120,7 @@ def generate_qr_code(data, file_name):
 def send_email_with_qr(registration):
     try:
         qr_file_name = "event_qr_code.png"
-        data = f"Name: {registration.team_leader_email}\nEvent: {registration.event}\nPayment Status: Paid"
+        data = f"Name: {registration.team_leader_name}\nEvent: {registration.event}\nPayment Status: Paid"
         generate_qr_code(data, qr_file_name)
         from_email = os.getenv('EMAIL_USER')
         from_password = os.getenv('EMAIL_PASSWORD')
