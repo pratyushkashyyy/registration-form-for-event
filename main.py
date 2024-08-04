@@ -2,13 +2,11 @@ from flask import Flask, request, render_template, redirect, url_for, session, f
 from flask_sqlalchemy import SQLAlchemy
 import os
 import uuid
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from werkzeug.utils import secure_filename
 import qrcode
 import yagmail
-import os
+import bcrypt
+from sqlalchemy.exc import SQLAlchemyError
 
 app = Flask(__name__)
 
@@ -21,7 +19,7 @@ if not os.path.exists(UPLOAD_FOLDER):
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///event_registration.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = 'your_secret_key'
+app.secret_key = os.getenv('FLASK_SECRET_KEY', 'your_secret_key')  # Use environment variable for secret key
 
 db = SQLAlchemy(app)
 
@@ -53,18 +51,14 @@ def index():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    participant_type = request.form.get('participant_type') 
-    if participant_type == 'Other':
-        college_name = request.form.get('college_name')
-    else:
-        college_name = 'Jain Deemed-to-be University'
+    participant_type = request.form.get('participant_type')
+    college_name = request.form.get('college_name') if participant_type == 'Other' else 'Jain Deemed-to-be University'
 
     id_card = request.files.get('college_id')
     id_card_filename = None
     if id_card and allowed_file(id_card.filename):
         id_card_filename = str(uuid.uuid4()) + "_" + secure_filename(id_card.filename)
-        id_card_path = os.path.join(app.config['UPLOAD_FOLDER'], id_card_filename)
-        id_card.save(id_card_path)
+        id_card.save(os.path.join(app.config['UPLOAD_FOLDER'], id_card_filename))
 
     event = request.form.get('event')
     team_leader_name = request.form.get('name')
@@ -99,9 +93,13 @@ def submit():
         id_card_filename=id_card_filename,
         payment_screenshot_filename=payment_screenshot_filename
     )
-    db.session.add(registration)
-    db.session.commit()
-
+    try:
+        db.session.add(registration)
+        db.session.commit()
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        flash('An error occurred while saving the registration. Please try again.', 'danger')
+        return redirect(url_for('index'))
 
     return render_template('success.html')
 
@@ -122,8 +120,8 @@ def send_email_with_qr(registration):
         qr_file_name = "event_qr_code.png"
         data = f"Name: {registration.team_leader_email}\nEvent: {registration.event}\nPayment Status: Paid"
         generate_qr_code(data, qr_file_name)
-        from_email = 'pratyushk403@gmail.com'
-        from_password = 'snbb adpd jbvz svyw'
+        from_email = os.getenv('EMAIL_USER')
+        from_password = os.getenv('EMAIL_PASSWORD')
         body = f"""
             Dear {registration.team_leader_name},
 
@@ -149,7 +147,6 @@ def send_email_with_qr(registration):
     except Exception as e:
         print(f"Failed to send email: {e}")
 
-
 @app.route('/admin/send_email/<int:id>', methods=['POST'])
 def send_email(id):
     if not session.get('logged_in'):
@@ -170,7 +167,7 @@ def login():
             session['logged_in'] = True
             return redirect(url_for('admin'))
         else:
-            flash('Invalid credentials, please try again.')
+            flash('Invalid credentials, please try again.', 'danger')
     return render_template('login.html')
 
 @app.route('/logout')
@@ -178,12 +175,26 @@ def logout():
     session.pop('logged_in', None)
     return redirect(url_for('index'))
 
+def get_dashboard_data():
+    total_sales = Registration.query.count()
+    total_revenue = "0"  # Update with actual revenue calculation if applicable
+    jain_registrations = Registration.query.filter_by(college_name='Jain Deemed-to-be University').count()
+    other_registrations = Registration.query.filter(Registration.college_name != 'Jain Deemed-to-be University').count()
+
+    return {
+        'total_sales': total_sales,
+        'total_revenue': total_revenue,
+        'jain_registrations': jain_registrations,
+        'other_registrations': other_registrations
+    }
+
 @app.route('/admin')
 def admin():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     registrations = Registration.query.all()
-    return render_template('admin.html', registrations=registrations)
+    dashboard_data = get_dashboard_data()
+    return render_template('admin.html', registrations=registrations, **dashboard_data)
 
 @app.route('/admin/delete/<int:id>', methods=['POST'])
 def delete_entry(id):
@@ -215,4 +226,4 @@ def uploaded_file(filename):
 
 if __name__ == '__main__':
     create_tables()
-    app.run(debug=True)
+    app.run(debug=False, host='0.0.0.0', port=8000)
