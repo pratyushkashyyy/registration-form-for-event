@@ -99,7 +99,6 @@ def submit():
     db.session.add(registration)
     db.session.commit()
 
-    send_email_to_registration(registration)
 
     return render_template('success.html')
 
