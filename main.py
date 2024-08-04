@@ -5,10 +5,13 @@ import uuid
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
 UPLOAD_FOLDER = 'uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
@@ -16,7 +19,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///event_registration.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
-
 
 db = SQLAlchemy(app)
 
@@ -39,6 +41,9 @@ def create_tables():
     with app.app_context():
         db.create_all()
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -47,23 +52,16 @@ def index():
 def submit():
     participant_type = request.form.get('participant_type') 
     if participant_type == 'Other':
-        print("other")
         college_name = request.form.get('college_name')
-        print(college_name)
     else:
         college_name = 'Jain Deemed-to-be University'
 
     id_card = request.files.get('college_id')
     id_card_filename = None
-    if id_card:
-        try:
-            id_card_filename = str(uuid.uuid4()) + "_" + id_card.filename
-            id_card_path = os.path.join(app.config['UPLOAD_FOLDER'], id_card_filename)
-            print(f"Saving college ID to: {id_card_path}")
-            id_card.save(id_card_path)
-        except Exception as e:
-            print(f"Failed to save college ID: {e}")
-
+    if id_card and allowed_file(id_card.filename):
+        id_card_filename = str(uuid.uuid4()) + "_" + secure_filename(id_card.filename)
+        id_card_path = os.path.join(app.config['UPLOAD_FOLDER'], id_card_filename)
+        id_card.save(id_card_path)
 
     event = request.form.get('event')
     team_leader_name = request.form.get('name')
@@ -71,25 +69,17 @@ def submit():
     team_leader_email = request.form.get('email')
     team_leader_phone = request.form.get('number')
 
-    team_members = []
-    for i in range(1, 6):
-        member_name = request.form.get(f'team_member_{i}')
-        if member_name:
-            team_members.append(member_name)
+    team_members = [request.form.get(f'team_member_{i}') for i in range(1, 6) if request.form.get(f'team_member_{i}')]
     team_members_str = ', '.join(team_members)
 
-    players = []
-    for i in range(1,6):
-        player_uid = request.form.get(f'player{i}_uid')
-        if player_uid:
-            players.append(player_uid)
+    players = [request.form.get(f'player{i}_uid') for i in range(1, 6) if request.form.get(f'player{i}_uid')]
     player_str = ', '.join(players)
 
     utr_number = request.form.get('utr')
     payment_screenshot = request.files.get('payment_screenshot')
     payment_screenshot_filename = None
-    if payment_screenshot:
-        payment_screenshot_filename = str(uuid.uuid4()) + "_" + payment_screenshot.filename
+    if payment_screenshot and allowed_file(payment_screenshot.filename):
+        payment_screenshot_filename = str(uuid.uuid4()) + "_" + secure_filename(payment_screenshot.filename)
         payment_screenshot.save(os.path.join(app.config['UPLOAD_FOLDER'], payment_screenshot_filename))
 
     registration = Registration(
@@ -101,7 +91,7 @@ def submit():
         team_leader_email=team_leader_email,
         team_leader_phone=team_leader_phone,
         team_members=team_members_str,
-        players = player_str,
+        players=player_str,
         utr_number=utr_number,
         id_card_filename=id_card_filename,
         payment_screenshot_filename=payment_screenshot_filename
@@ -109,9 +99,9 @@ def submit():
     db.session.add(registration)
     db.session.commit()
 
+    send_email_to_registration(registration)
+
     return render_template('success.html')
-
-
 
 def send_email_to_registration(registration):
     smtp_server = 'smtp.gmail.com'
@@ -153,7 +143,6 @@ def send_email(id):
     flash('Email has been sent', 'success')
 
     return redirect(url_for('admin'))
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -202,7 +191,6 @@ def delete_entry(id):
     flash('Registration has been deleted', 'success')
     
     return redirect(url_for('admin'))
-
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
