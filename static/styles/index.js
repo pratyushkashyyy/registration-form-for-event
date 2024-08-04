@@ -1,4 +1,51 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Function to show the pop-up
+    function showPopup() {
+        Swal.fire({
+            title: 'Info',
+            html: `<p>The registration for Jain University Students will open from August 14th. Stay tuned!</p>
+                   <p style="font-size: 2em; font-weight: bold;" id="timer">Loading...</p>`,
+            icon: 'info',
+            background: '#1A1A1A',
+            color: '#00FF00',
+            showConfirmButton: false,
+            didOpen: () => {
+                const timerElement = Swal.getHtmlContainer().querySelector('#timer');
+                const countdownDate = new Date('August 14, 2024 00:00:00').getTime();
+                const updateTimer = () => {
+                    const now = new Date().getTime();
+                    const distance = countdownDate - now;
+
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    timerElement.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+                    if (distance < 0) {
+                        clearInterval(popupInterval);
+                        timerElement.textContent = "Registration is open!";
+                    }
+                };
+
+                const popupInterval = setInterval(updateTimer, 1000);
+                updateTimer(); // Call once to avoid delay in first display
+            }
+        });
+    }
+
+    // Add event listener to the radio buttons
+    const jainRadio = document.getElementById('jain');
+    jainRadio.addEventListener('change', () => {
+        if (jainRadio.checked) {
+            showPopup();
+        }
+    });
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
     const participantTypeRadios = document.querySelectorAll('input[name="participant_type"]');
     const collegeNameBox = document.getElementById('college-name-box');
     const eventRadios = document.querySelectorAll('input[name="event"]');
