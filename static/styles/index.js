@@ -85,30 +85,30 @@ function updatePrice() {
     if (participantType && event) {
         const priceMap = {
             'Jain': {
-                'BGMI': 299,
-                'Valorant': 299,
-                'Blazing-Tongue': 99,
+                'BGMI': 199,
+                'Valorant': 199,
+                'Blazing-Tongue': 149,
                 'IT-Quiz': 99,
                 'Pixel-Perfect': 99,
                 'Meme-Mania': 99,
                 'CTF': 199,
                 'Web-Wizards': 149,
                 'Scam-Poetry': 149,
-                'Jury-Rigged': 249,
-                'Ideathon': 249
+                'Jury-Rigged': 199,
+                'Ideathon': 199
             },
             'Other': {
-                'BGMI': 299,
-                'Valorant': 299,
-                'Ideathon': 299,
-                'Jury-Rigged': 299,
-                'Blazing Tongue': 149,
+                'BGMI': 249,
+                'Valorant': 249,
+                'Blazing-Tongue': 199,
                 'IT-Quiz': 149,
                 'Pixel-Perfect': 149,
                 'Meme-Mania': 149,
                 'CTF': 249,
                 'Web-Wizards': 199,
-                'Scam-Poetry': 199
+                'Scam-Poetry': 199,
+                'Jury-Rigged': 249,
+                'Ideathon': 249
             }
         };
         
