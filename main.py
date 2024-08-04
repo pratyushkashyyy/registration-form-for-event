@@ -45,8 +45,13 @@ def index():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    participant_type = request.form.get('participant_type')
-    college_name = request.form.get('college-name') if participant_type == 'Other' else None
+    participant_type = request.form.get('participant_type') 
+    if participant_type == 'Other':
+        print("other")
+        college_name = request.form.get('college_name')
+        print(college_name)
+    else:
+        college_name = 'Jain Deemed-to-be University'
 
     id_card = request.files.get('college_id')
     id_card_filename = None

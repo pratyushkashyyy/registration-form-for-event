@@ -1,0 +1,4 @@
+flask_sqlachemy
+flask-WTF
+flask
+gunicorn
