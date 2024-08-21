@@ -7,7 +7,7 @@ import qrcode
 import yagmail
 import bcrypt
 from sqlalchemy.exc import SQLAlchemyError
-
+from create_excel import create, create_all
 app = Flask(__name__)
 
 UPLOAD_FOLDER = 'uploads'
@@ -95,6 +95,7 @@ def submit():
         id_card_filename=id_card_filename,
         payment_screenshot_filename=payment_screenshot_filename
     )
+    create(participant_type,college_name,event,team_leader_name,team_leader_email,team_leader_phone,team_name,team_members_str,player_str)
     try:
         db.session.add(registration)
         db.session.commit()
@@ -102,7 +103,6 @@ def submit():
         db.session.rollback()
         flash('An error occurred while saving the registration. Please try again.', 'danger')
         return redirect(url_for('index'))
-
     return render_template('success.html')
 
 def generate_qr_code(data, file_name):
@@ -228,4 +228,5 @@ def uploaded_file(filename):
 
 if __name__ == '__main__':
     create_tables()
+    create_all()
     app.run(debug=False, host='0.0.0.0', port=8000)
